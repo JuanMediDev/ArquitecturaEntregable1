@@ -4,7 +4,7 @@ using DentaCare.Refactored.Enumeraciones;
 
 namespace DentaCare.Refactored.Reglas.Tarifas;
 
-public class TarifaOdontopediatria : IReglaTarifa
+public sealed class TarifaOdontopediatria : IReglaTarifa
 {
     private const decimal Factor = 1.1m;
     public int Orden => 10;

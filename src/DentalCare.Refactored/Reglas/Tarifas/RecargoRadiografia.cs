@@ -3,7 +3,7 @@ using DentaCare.Refactored.Modelos;
 
 namespace DentaCare.Refactored.Reglas.Tarifas;
 
-public class RecargoRadiografia : IReglaTarifa
+public sealed class RecargoRadiografia : IReglaTarifa
 {
     private const decimal Recargo = 35.0m;
     public int Orden => 40;

@@ -5,7 +5,7 @@ namespace DentaCare.Refactored.Entidades;
 /// <summary>
 /// Representa los datos de un paciente.
 /// </summary>
-public class Paciente
+public sealed class Paciente
 {
     public string Id { get; init; } = string.Empty;
     public string NombreCompleto { get; init; } = string.Empty;

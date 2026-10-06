@@ -5,7 +5,7 @@ using DentaCare.Refactored.Enumeraciones;
 
 namespace DentaCare.Refactored.Reglas.Penalizaciones;
 
-public class RecargoCancelacionTardiaCirugia : IReglaPenalizacion
+public sealed class RecargoCancelacionTardiaCirugia : IReglaPenalizacion
 {
     public bool Aplica(ContextoCancelacion contexto)
     {

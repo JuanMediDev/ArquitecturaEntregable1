@@ -6,7 +6,7 @@ namespace DentaCare.Refactored.Entidades;
 /// <summary>
 /// Representa una cita odontológica.
 /// </summary>
-public class Cita
+public sealed class Cita
 {
     public Cita(string id, Paciente paciente, Odontologo odontologo, DateTime fechaHora, decimal copagoCalculado)
     {
