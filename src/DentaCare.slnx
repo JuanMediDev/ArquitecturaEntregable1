@@ -1,0 +1,4 @@
+<Solution>
+	<Project Path="DentaCare.Legacy/DentaCare.Legacy.csproj" />
+	<Project Path="DentalCare.Refactored/DentalCare.Refactored.csproj" />
+</Solution>
