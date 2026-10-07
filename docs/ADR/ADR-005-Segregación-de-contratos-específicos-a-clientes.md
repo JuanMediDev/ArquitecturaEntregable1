@@ -16,13 +16,15 @@ Se aplicará el Principio de Segregación de Interfaces (ISP), dividiendo los co
 * Para el acceso a estadísticas, se separó `IRegistroReportes` (utilizado por los servicios orquestadores para incrementar contadores) de `IConsultaReportes` (utilizado potencialmente por controladores de vista para ver la estadística actual).
 * El componente en memoria `RepositorioEnMemoria` y `ReporteCitasEnMemoria` implementan múltiples interfaces simultáneamente, pero los servicios orquestadores solo solicitan y conocen la interfaz que les compete.
 
+Se descartó la creación de interfaces genéricas de repositorios (tipo `IRepository<T>`) porque los requerimientos de cada entidad varían (Citas guarda todas las variables, Cancelaciones solo actualiza un estado).
+
 ---
 
 ## Consecuencias
 
 ### Positivas
 * El acoplamiento aferente/eferente es limpio; los servicios solo dependen de los fragmentos exactos que utilizan.
-* Si un contrato de reporte cambia, no afecta al servicio de cancelación ni lo obliga a recompilar.
+* Si el contrato de consulta estadística (`IConsultaReportes`) cambia, no afecta al `ServicioCancelacion` ni lo obliga a recompilar, ya que este solo depende de `IRegistroReportes`.
 * Hace que los *mocks* en las pruebas unitarias sean extremadamente fáciles de configurar (menos métodos que simular).
 
 ### Negativas
@@ -34,4 +36,4 @@ Se aplicará el Principio de Segregación de Interfaces (ISP), dividiendo los co
 ## Cumplimiento (Compliance)
 Durante las auditorías de diseño, se verificará que ninguna clase cliente consuma una interfaz de la que solo utiliza una fracción de sus métodos. Si se detecta un patrón de métodos "huérfanos" (no usados por el cliente), la interfaz implicada deberá fraccionarse (segregarse).
 
-Trazabilidad: Informe de Métricas y validación del Principio de Segregación de Interfaces (ISP).
+Trazabilidad: Informe de Métricas, sección 8.5 y cumplimiento del Principio de Segregación de Interfaces (ISP). Norma ISO/IEC/IEEE 42010:2022.

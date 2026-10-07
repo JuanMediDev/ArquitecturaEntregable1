@@ -1,11 +1,12 @@
-# ADR-004: Asignación de responsabilidades únicas por componente
+# ADR-004: Asignación de responsabilidades únicas por componente (SRP)
 * Estado: Accepted
 * Fecha: 2026-10-07
 * Autores: Juan José Medina Sepúlveda, Manuel Alejandro Domínguez Guerrero
 
 ## Contexto
-En el diseño legado, la clase `GestorCitasOdontologicas` era una "God Class" con un nivel de cohesión bajísimo. Esta única clase gestionaba la lógica de negocio (agendar y cancelar), los cálculos financieros (copagos y penalizaciones), la orquestación de correos y SMS, y la ejecución de comandos SQL a la base de datos.
+En el diseño legado, la clase `GestorCitasOdontologicas` era una "God Class" con un nivel de cohesión intermedio-bajo. Esta única clase gestionaba la lógica de negocio (agendar y cancelar), los cálculos financieros (copagos y penalizaciones), la orquestación de correos y SMS, y la ejecución de comandos SQL a la base de datos.
 Esta mezcla de responsabilidades provocaba que cualquier cambio (ya fuera modificar un texto de correo, alterar un porcentaje o cambiar una tabla en BD) obligara a modificar la misma unidad de código, aumentando dramáticamente el riesgo de introducir defectos y dificultando su comprensión y mantenimiento.
+Los requisitos arquitectónicamente significativos dictan que cada componente debe tener una única razón para cambiar, aislando los motivos de modificación.
 
 ---
 
@@ -19,15 +20,17 @@ La arquitectura se dividirá en componentes altamente cohesivos:
 * **Utilidades Especializadas:** Se extrajo `ConstructorMensajesCita` para armar los textos, y `GuidGeneradorIdentificador` para crear IDs.
 * **Adaptadores de Persistencia:** Las clases `RepositorioEnMemoria` e `ICitaRepositorio` se limitan exclusivamente al acceso a datos.
 
+Se descartó dividir la lógica en microservicios debido a que el alcance del proyecto sigue siendo un monolito interno, prefiriendo la separación lógica a nivel de espacio de nombres y clases.
+
 ---
 
 ## Consecuencias
 
 ### Positivas
-* Alta cohesión (LCOM = 0.00 en los servicios refactorizados).
+* LCOM = 0.00 en los servicios orquestadores, logrando una cohesión técnica perfecta (aunque este valor se deba a que tienen un solo método principal).
+* Los adaptadores de memoria presentan un LCOM = 0,50 (cohesión intermedia) dado que exponen métodos separados de lectura y escritura.
 * Los archivos son mucho más pequeños y fáciles de leer.
 * La probabilidad de dañar el flujo de base de datos al modificar un texto de notificación es nula.
-* Cada componente puede probarse unitariamente de forma aislada.
 
 ### Negativas
 * Aumento significativo en la cantidad de clases y archivos (de 6 a 48 tipos).
@@ -38,4 +41,4 @@ La arquitectura se dividirá en componentes altamente cohesivos:
 ## Cumplimiento (Compliance)
 Se verificará durante las revisiones de código que ninguna clase asuma responsabilidades cruzadas. Por ejemplo, los repositorios no deben enviar correos, y los calculadores no deben interactuar con la base de datos. Cada nueva funcionalidad deberá empaquetarse en un servicio o clase especializada que será inyectada donde se necesite.
 
-Trazabilidad: Informe de Métricas, validación del Principio de Responsabilidad Única y Arquitectura de Componentes.
+Trazabilidad: Informe de Métricas, secciones 7.3 a 7.5, 8.3, 8.4 y validación del Principio de Responsabilidad Única. Norma ISO/IEC/IEEE 42010:2022.

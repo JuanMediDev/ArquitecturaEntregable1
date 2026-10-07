@@ -44,8 +44,8 @@ Se descartaron el contenedor IoC, porque agrega una herramienta que el alcance n
 ---
 
 ## Cumplimiento (Compliance)
-Queda prohibido utilizar la palabra reservada `new` dentro de las capas de Servicio, Reglas o Modelos para crear instancias de infraestructura. Todo objeto de servicio periférico debe recibirse inyectado a través del constructor exigiendo una abstracción.
+Queda prohibido utilizar la palabra reservada `new` dentro de las capas de Servicio, Reglas o Modelos para crear instancias de infraestructura o servicios. Todo objeto de servicio periférico debe recibirse inyectado a través del constructor. Sí está permitido el uso de `new` para instanciar Entidades o Modelos de Dominio (ej. `Cita`, `ContextoCancelacion`).
 
 Se verificará que el proyecto no referencie `System.Data.SqlClient`, `System.Net.Mail` ni Twilio, ni en el código ni en el `.csproj`, y que no haya credenciales en el código fuente. Durante las revisiones de código, todo cambio que agregue una dependencia concreta a un servicio se revisará contra este ADR. 
 
-Trazabilidad: Informe de Métricas, secciones 4.4, 4.5, 7.3 a 7.5 y 8.7. Arquitectura Hexagonal y cumplimiento del Principio de Inversión de Dependencias (DIP). Norma ISO/IEC/IEEE 42010:2022.
+Trazabilidad: Informe de Métricas, secciones 4.5, 7.3 a 7.5 y 8.7. Arquitectura Hexagonal y cumplimiento del Principio de Inversión de Dependencias (DIP). Norma ISO/IEC/IEEE 42010:2022.

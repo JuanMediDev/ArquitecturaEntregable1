@@ -5,7 +5,7 @@
 
 ## Contexto
 Las reglas de precio y de cancelación estaban escritas como condicionales dentro de `GestorCitasOdontologicas`: la tarifa por especialidad, el descuento por convenio, los recargos de primera visita y radiografía, y la penalización por cancelación tardía. 
-Si el consultorio añadía un nuevo convenio o canal de notificación, obligaba a editar `AgendarCita` o `CancelarCita` para agregar ramas `if/else`, lo que concentraba 9 decisiones (complejidad ciclomática 10) y violaba gravemente el Principio Abierto/Cerrado (OCP).
+Si el consultorio añadía un nuevo convenio, obligaba a editar `AgendarCita` o `CancelarCita` para agregar ramas `if/else`, lo que concentraba 9 decisiones (complejidad ciclomática 10) y violaba gravemente el Principio Abierto/Cerrado (OCP). Adicionalmente, agregar un canal de notificación obligaba a modificar `NotificacionServicio.EnviarEmailYSms`.
 
 Los requisitos arquitectónicamente significativos son: modificar o agregar una política afectando una sola unidad de código, no editar los algoritmos de cálculo al agregar variantes, conservar los valores que calcula el legado y poder probar cada regla por separado.
 
@@ -18,9 +18,9 @@ Se aplicará el Principio Abierto/Cerrado (OCP) abstrayendo las lógicas de deci
 * `IReglaPenalizacion` tendrá implementaciones como `PenalizacionCancelacionTardia`. `CalculadorPenalizacion` suma las que aplican.
 * El envío de notificaciones fue encapsulado en `NotificadorCompuesto`, iterando canales sin requerir conocer cuántos existen.
 
-Cuando se necesite una nueva tarifa o canal, bastará con crear una nueva clase e inyectarla en `Program.cs`. No se modificará el orquestador principal.
+Cuando se necesite una nueva tarifa o canal, bastará con crear una nueva clase e inyectarla en `Program.cs`. No se modificará el orquestador principal ni el servicio de notificaciones original.
 
-Se descartaron mantener los `if / else`, usar un `switch` sobre enumeraciones, y una tabla de configuración plana.
+Se descartaron mantener los `if / else`, usar un `switch` sobre enumeraciones, y una tabla de configuración plana porque no cubren condiciones complejas.
 
 ---
 
@@ -43,6 +43,6 @@ Se descartaron mantener los `if / else`, usar un `switch` sobre enumeraciones, y
 ## Cumplimiento (Compliance)
 Se prohíbe terminantemente agregar bloques `switch` o `if/else` que discriminen por enumeradores como `Convenio` o `Especialidad` dentro de los calculadores o servicios. Toda tarifa, descuento, recargo o penalización nueva será una clase que implemente la interfaz correspondiente y se registre en la raíz.
 
-Se verificará que los casos de aceptación se mantengan en 130,00 y 90,00 (EPS) y 25,00 (Prepagada). Durante las revisiones, cualquier cambio se evaluará contra las pruebas de aceptación, garantizando que no se modifique el núcleo.
+Se verificará que los casos de aceptación se mantengan en 130,00 y 90,00 (EPS) y 25,00 (Prepagada). Durante las revisiones manuales, cualquier cambio se evaluará contra los casos de aceptación, garantizando que no se modifique el núcleo.
 
-Trazabilidad: Informe de Métricas, secciones 3, 4.1 a 4.3, 7.3 a 7.6. Evaluación de complejidad ciclomática y Principio Abierto/Cerrado (OCP). Norma ISO/IEC/IEEE 42010:2022.
+Trazabilidad: Informe de Métricas, secciones 3, 4.1 a 4.3, 6.8, 7.3 a 7.6 y 8.6. Evaluación de complejidad ciclomática y Principio Abierto/Cerrado (OCP). Norma ISO/IEC/IEEE 42010:2022.
