@@ -1,8 +1,5 @@
-namespace DentaCare.Refactored.Enumeraciones;
+﻿namespace DentaCare.Refactored.Enumeraciones;
 
-/// <summary>
-/// Representa la especialidad del odontólogo.
-/// </summary>
 public enum Especialidad
 {
     Ortodoncia = 1,

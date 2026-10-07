@@ -43,7 +43,7 @@ Esto generaba una clase con alto acoplamiento, múltiples razones de cambio y de
 | Consultar totales | `Servicios/ReporteCitasEnMemoria.cs` mediante `IConsultaReportes` | ISP |
 | Guardar citas | `Servicios/RepositorioEnMemoria.cs` mediante `ICitaRepositorio` | DIP e ISP |
 | Registrar cancelaciones | `Servicios/RepositorioEnMemoria.cs` mediante `ICancelacionRepositorio` | DIP e ISP |
-| Notificar al paciente | `Servicios/NotificadorEnMemoria.cs` mediante `INotificador` | DIP e ISP |
+| Notificar al paciente | `Servicios/NotificadorCompuesto.cs` mediante `INotificador` | DIP e ISP |
 | Texto de confirmación y cancelación | `Modelos/MensajeNotificacion.cs` y `ConstructorMensajesCita.cs` | SRP |
 
 ## Organización de carpetas
@@ -100,9 +100,11 @@ src/DentalCare.Refactored/
 └── Servicios/
 	├── CalculadorCopago.cs
 	├── CalculadorPenalizacion.cs
+	├── CanalCorreoEnMemoria.cs
+	├── CanalSmsEnMemoria.cs
 	├── ConstructorMensajesCita.cs
 	├── GuidGeneradorIdentificador.cs
-	├── NotificadorEnMemoria.cs
+	├── NotificadorCompuesto.cs
 	├── ReporteCitasEnMemoria.cs
 	├── RepositorioEnMemoria.cs
 	├── ServicioAgendamiento.cs
@@ -133,7 +135,7 @@ Las interfaces se encuentran en `Interfaces/` y definen los contratos que consum
 6. El reporte en memoria.
 7. El constructor de mensajes.
 8. El repositorio en memoria.
-9. El notificador en memoria.
+9. El notificador compuesto (junto con sus canales de correo y SMS en memoria).
 10. Los servicios de agendamiento y cancelación.
 
 No se utiliza un contenedor de inversión de control.
@@ -165,27 +167,41 @@ Los servicios dependen de abstracciones y no de persistencia, notificación o ge
 Para mantener el alcance sin infraestructura externa se utilizan dos adaptadores en memoria:
 
 - `RepositorioEnMemoria`: conserva las citas y cancelaciones durante la ejecución.
-- `NotificadorEnMemoria`: conserva los mensajes generados durante la ejecución.
+- `CanalCorreoEnMemoria` y `CanalSmsEnMemoria`: simulan el envío de notificaciones de forma local, siendo orquestados por un `NotificadorCompuesto`.
 
 Estas clases permiten demostrar los contratos y la inyección de dependencias sin conexión a SQL Server, correo electrónico o servicios SMS.
 
 ## Caso de ejecución validado
 
-`Program.cs` ejecuta actualmente el escenario equivalente al caso solicitado:
+`Program.cs` ejecuta actualmente dos escenarios equivalentes a los casos solicitados:
 
+**Escenario 1 (EPS)**
 - Paciente con convenio EPS.
 - Primera consulta.
 - Especialidad Cirugía.
 - Radiografía requerida.
 - Cancelación con 12 horas de anticipación.
 
+**Escenario 2 (Prepagada)**
+- Paciente con convenio Prepagada.
+- Sin primera consulta.
+- Especialidad Cirugía.
+- Sin radiografía requerida.
+
 Resultado esperado y observado:
 
 ```text
-Copago: 130,00
-Penalización: 90,00
-Total recaudado: 130,00
-Total canceladas: 1
+[CorreoEnMemoria] Enviando a ana@correo.com: Confirmación cita p1...
+[SmsEnMemoria] Enviando SMS a 3000000000
+Cita agendada (EPS): p1..., Copago: $ 130,00
+[CorreoEnMemoria] Enviando a ana@correo.com: Cancelación cita p1...
+[SmsEnMemoria] Enviando SMS a 3000000000
+Cita cancelada: p1..., Penalización aplicada: $ 90,00
+[CorreoEnMemoria] Enviando a juan@correo.com: Confirmación cita p2...
+[SmsEnMemoria] Enviando SMS a 3000000001
+Cita agendada (Prepagada): p2..., Copago: $ 25,00
+Total recaudado (memoria): $ 155,00
+Total canceladas (memoria): 1
 ```
 
 ## Límites del alcance

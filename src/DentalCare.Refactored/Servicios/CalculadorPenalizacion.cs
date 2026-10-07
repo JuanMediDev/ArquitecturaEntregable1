@@ -1,13 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using DentaCare.Refactored.Interfaces;
 using DentaCare.Refactored.Modelos;
 
 namespace DentaCare.Refactored.Servicios;
 
-/// <summary>
-/// SRP: orquesta reglas para calcular penalizaciones por cancelación.
-/// </summary>
 public sealed class CalculadorPenalizacion : ICalculadorPenalizacion
 {
     private readonly IEnumerable<IReglaPenalizacion> _reglas;

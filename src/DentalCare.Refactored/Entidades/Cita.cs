@@ -1,11 +1,8 @@
-using System;
+﻿using System;
 using DentaCare.Refactored.Enumeraciones;
 
 namespace DentaCare.Refactored.Entidades;
 
-/// <summary>
-/// Representa una cita odontológica.
-/// </summary>
 public sealed class Cita
 {
     public Cita(string id, Paciente paciente, Odontologo odontologo, DateTime fechaHora, decimal copagoCalculado)
@@ -27,9 +24,6 @@ public sealed class Cita
     public EstadoCita Estado { get; private set; }
     public decimal PenalizacionCancelacion { get; private set; }
 
-    /// <summary>
-    /// Cancela la cita y registra la penalización.
-    /// </summary>
     public void Cancelar(decimal penalizacion)
     {
         Estado = EstadoCita.Cancelada;

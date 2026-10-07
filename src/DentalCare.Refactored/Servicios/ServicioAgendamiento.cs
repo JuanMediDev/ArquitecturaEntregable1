@@ -1,13 +1,10 @@
-using System;
+﻿using System;
 using DentaCare.Refactored.Interfaces;
 using DentaCare.Refactored.Modelos;
 using DentaCare.Refactored.Entidades;
 
 namespace DentaCare.Refactored.Servicios;
 
-/// <summary>
-/// SRP: orquesta el caso de uso de agendar una cita.
-/// </summary>
 public sealed class ServicioAgendamiento : IServicioAgendamiento
 {
     private readonly ICalculadorCopago _calculadorCopago;
@@ -44,9 +41,9 @@ public sealed class ServicioAgendamiento : IServicioAgendamiento
         var id = _generador.Generar();
         var cita = new Cita(id, solicitud.Paciente, solicitud.Odontologo, solicitud.FechaHora, copago);
 
-        _registro?.RegistrarRecaudo(copago);
+        _registro.RegistrarRecaudo(copago);
 
-        _repositorio?.Guardar(cita);
+        _repositorio.Guardar(cita);
 
         var mensaje = _constructor.Confirmacion(cita);
         _notificador.Notificar(mensaje);

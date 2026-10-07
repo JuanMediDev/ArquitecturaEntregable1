@@ -1,10 +1,7 @@
-using DentaCare.Refactored.Enumeraciones;
+﻿using DentaCare.Refactored.Enumeraciones;
 
 namespace DentaCare.Refactored.Entidades;
 
-/// <summary>
-/// Representa los datos de un odontólogo.
-/// </summary>
 public sealed class Odontologo
 {
     public string Id { get; init; } = string.Empty;

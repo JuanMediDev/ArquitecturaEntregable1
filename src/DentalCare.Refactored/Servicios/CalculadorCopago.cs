@@ -1,13 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using DentaCare.Refactored.Interfaces;
 using DentaCare.Refactored.Modelos;
 
 namespace DentaCare.Refactored.Servicios;
 
-/// <summary>
-/// SRP: orquesta reglas de tarifa para calcular el copago.
-/// </summary>
 public sealed class CalculadorCopago : ICalculadorCopago
 {
     private readonly IEnumerable<IReglaTarifa> _reglas;

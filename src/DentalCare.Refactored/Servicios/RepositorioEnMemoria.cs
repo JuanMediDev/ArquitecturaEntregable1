@@ -1,11 +1,8 @@
-using DentaCare.Refactored.Interfaces;
+﻿using DentaCare.Refactored.Interfaces;
 using DentaCare.Refactored.Entidades;
 
 namespace DentaCare.Refactored.Servicios;
 
-/// <summary>
-/// SRP: conserva citas y cancelaciones en memoria sin depender de infraestructura externa.
-/// </summary>
 public sealed class RepositorioEnMemoria : ICitaRepositorio, ICancelacionRepositorio
 {
     private readonly List<Cita> _citas = new();

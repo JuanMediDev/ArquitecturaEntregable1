@@ -1,10 +1,7 @@
-using DentaCare.Refactored.Modelos;
+﻿using DentaCare.Refactored.Modelos;
 
 namespace DentaCare.Refactored.Interfaces;
 
-/// <summary>
-/// Regla de tarifa aplicada al cálculo del copago.
-/// </summary>
 public interface IReglaTarifa
 {
     int Orden { get; }

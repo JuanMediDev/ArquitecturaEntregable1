@@ -1,13 +1,10 @@
-using System;
+﻿using System;
 using DentaCare.Refactored.Interfaces;
 using DentaCare.Refactored.Modelos;
 using DentaCare.Refactored.Entidades;
 
 namespace DentaCare.Refactored.Servicios;
 
-/// <summary>
-/// SRP: orquesta el caso de uso de cancelar una cita.
-/// </summary>
 public sealed class ServicioCancelacion : IServicioCancelacion
 {
     private readonly ICalculadorPenalizacion _calculadorPenalizacion;
@@ -36,9 +33,9 @@ public sealed class ServicioCancelacion : IServicioCancelacion
         var penalizacion = _calculadorPenalizacion.Calcular(contexto);
         cita.Cancelar(penalizacion);
 
-        _registro?.RegistrarCancelacion();
+        _registro.RegistrarCancelacion();
 
-        _repositorio?.RegistrarCancelacion(cita.Id, penalizacion);
+        _repositorio.RegistrarCancelacion(cita.Id, penalizacion);
 
         var mensaje = _constructor.Cancelacion(cita);
         _notificador.Notificar(mensaje);
