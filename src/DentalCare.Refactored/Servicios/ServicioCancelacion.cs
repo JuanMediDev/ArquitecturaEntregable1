@@ -23,11 +23,11 @@ public sealed class ServicioCancelacion : IServicioCancelacion
         INotificador notificador,
         ICancelacionRepositorio repositorio)
     {
-        _calculadorPenalizacion = calculadorPenalizacion;
-        _registro = registro;
-        _constructor = constructor;
-        _notificador = notificador;
-        _repositorio = repositorio;
+        _calculadorPenalizacion = calculadorPenalizacion ?? throw new ArgumentNullException(nameof(calculadorPenalizacion));
+        _registro = registro ?? throw new ArgumentNullException(nameof(registro));
+        _constructor = constructor ?? throw new ArgumentNullException(nameof(constructor));
+        _notificador = notificador ?? throw new ArgumentNullException(nameof(notificador));
+        _repositorio = repositorio ?? throw new ArgumentNullException(nameof(repositorio));
     }
 
     public decimal Cancelar(Cita cita, DateTime fechaHoraCancelacion)

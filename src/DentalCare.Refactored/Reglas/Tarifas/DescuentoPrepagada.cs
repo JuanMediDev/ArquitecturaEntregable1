@@ -11,5 +11,5 @@ public sealed class DescuentoPrepagada : IReglaTarifa
 
     public bool Aplica(SolicitudAgendamiento solicitud) => solicitud.Paciente.Convenio == Convenio.Prepagada;
 
-    public decimal Aplicar(decimal valorActual, SolicitudAgendamiento solicitud) => valorActual - (valorActual * FactorDescuento);
+    public decimal Aplicar(decimal valorActual, SolicitudAgendamiento solicitud) => valorActual * FactorDescuento;
 }

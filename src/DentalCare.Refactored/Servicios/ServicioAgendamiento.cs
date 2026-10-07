@@ -27,13 +27,13 @@ public sealed class ServicioAgendamiento : IServicioAgendamiento
         INotificador notificador,
         ICitaRepositorio repositorio)
     {
-        _calculadorCopago = calculadorCopago;
-        _generador = generador;
-        _validador = validador;
-        _registro = registro;
-        _constructor = constructor;
-        _notificador = notificador;
-        _repositorio = repositorio;
+        _calculadorCopago = calculadorCopago ?? throw new ArgumentNullException(nameof(calculadorCopago));
+        _generador = generador ?? throw new ArgumentNullException(nameof(generador));
+        _validador = validador ?? throw new ArgumentNullException(nameof(validador));
+        _registro = registro ?? throw new ArgumentNullException(nameof(registro));
+        _constructor = constructor ?? throw new ArgumentNullException(nameof(constructor));
+        _notificador = notificador ?? throw new ArgumentNullException(nameof(notificador));
+        _repositorio = repositorio ?? throw new ArgumentNullException(nameof(repositorio));
     }
 
     public Cita Agendar(SolicitudAgendamiento solicitud)
